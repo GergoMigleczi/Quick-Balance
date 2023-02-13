@@ -1,0 +1,77 @@
+#transactions, #accounts{
+    margin: 50px auto;
+    width: 100%;
+}
+
+.tr-row{
+    display: flex;
+    margin: 6px; 
+    width: 100%;
+    background-color: var(--elementColor);
+    border-radius: 20px;
+    padding: 3px 0px;
+    font-size: 1.1rem;
+}
+
+.tr-cell{
+    padding: 5px 10px;
+    background-color: var(--elementColor);
+    border-radius: 20px;
+    width: 20%;
+    box-sizing: border-box;
+}
+
+.filter{
+    width: 90%;
+    margin:0px auto;
+}
+
+
+.width40{
+    width: 40%;
+    box-sizing: border-box;
+    margin: 0px;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.text-left{
+    text-align: left;
+}
+
+h1{
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.pad-left{
+    padding-left: 15px;
+}
+
+@media screen and (max-width: 750px){
+    .filter{
+      width: 98%;
+    }
+
+    .filter label{
+        font-size: 1rem;
+    }
+
+    .tr-row{
+        font-size: 0.9rem;
+    }
+  }
+
+  @media screen and (max-width: 600px){
+    .filter{
+      width: 98%;
+      flex-wrap: wrap;
+    }
+
+    .margin-top{
+        margin-top: 10px;
+    }
+    
+  }

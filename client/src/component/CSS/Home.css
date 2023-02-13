@@ -1,0 +1,22 @@
+#home{
+    margin: 50px auto;
+}
+
+.home-container{
+    width: 90%;
+    margin: 0px auto;
+}
+
+.width40{
+    width: 35%;
+}
+
+.width60{
+    width: 65%;
+}
+
+.home-container button{
+    margin: 5px 15px;
+    padding: 13px 20px;
+    width: 200px;
+}

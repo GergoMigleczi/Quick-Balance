@@ -1,0 +1,13 @@
+.add-transaction, .edit-transaction{
+    width: 300px;
+    margin: 50px auto;
+}
+
+.err{
+    color: red;
+}
+
+#account{
+    width: 120px;
+    font-size: 0.8rem;
+}
