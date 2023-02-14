@@ -1,13 +1,13 @@
 const express = require('express'); 
 const db = require('./queries.js')
 const cors = require('cors');
+const helmet= require('helmet')
 const app = express(); 
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3001; 
 
+app.use(helmet());
 app.use(cors());
-//app.use(express.static('public'))
-//app.use(express.json({extended: true, limit: '1mb'}));
 app.use(bodyParser.json());
 
 app.get('/get-users', db.getUsers);
