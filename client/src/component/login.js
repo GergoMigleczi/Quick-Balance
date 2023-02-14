@@ -12,6 +12,8 @@ function Login({loginORregister}) {
     const [password, setPassword] = useState('');
     const [incorrect, setIncorrect] = useState(false);
     const [exists, setExists] = useState(false);
+    const [fail, setFail] = useState(false);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let link;
@@ -83,8 +85,12 @@ function Login({loginORregister}) {
                 const data = await response.json();
                 if(data.err){
                     console.log(data.err);
+                    setFail(true);
+                }else{
+                    setFail(false);
+                    navigate('/');
+
                 }
-                navigate('/');
             }
         }
     }
@@ -101,11 +107,11 @@ function Login({loginORregister}) {
             {exists ? 'Username already exists!' : ''}</p>
             <form onSubmit={e => login(e)}>
                 <label htmlFor='username'>Username</label>
-                <input className='input-field' id='username' type='text' placeholder='username' required onChange={e => {setUsername(e.target.value)}}/>
+                <input className='input-field' id='username' type='text' placeholder='username' required onChange={e => {setUsername(e.target.value); if(fail){setFail(false)}}}/>
 
                 <label htmlFor='password'>Password</label>
                 <div className='flex center-h'>
-                    <input className='input-field' id='password' type='password' required onChange={e => {setPassword(e.target.value)}}/>
+                    <input className='input-field' id='password' type='password' required onChange={e => {setPassword(e.target.value); if(fail){setFail(false)}}}/>
                     <i className="far fa-eye" id="togglePassword" onClick={togglePassword}></i>
                 </div>
 
@@ -114,6 +120,7 @@ function Login({loginORregister}) {
                 <Link className='link' to={linkTo} id='link' onClick={()=>{setExists(false); setIncorrect(false)}}>{link}</Link>
                 </div>
             </form>
+            <p className='fail'>{fail ? 'Failed to register an account. Avoid apostrophes' : ''}</p>
     </div>
   )
 }

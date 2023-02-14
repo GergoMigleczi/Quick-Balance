@@ -116,7 +116,7 @@ function EditTransaction() {
                     <input className='button' type='submit' value='Edit'/>
                 </form>
                 <p className='success'>{success ? 'Edit successful' : ''}</p>
-                <p className='fail'>{fail ? 'Edit failed' : ''}</p>
+                <p className='fail'>{fail ? 'Avoid using an apostrophe' : ''}</p>
             </div>
         )
     }else{

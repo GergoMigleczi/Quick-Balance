@@ -24,6 +24,7 @@ function AddTransaction() {
     const [desc, setDesc] = useState('');
     const [account, setAccount] = useState('');
     const [success, setSuccess] = useState(false);
+    const [fail, setFail] = useState(false);
 
     const addTransaction = async (e) =>{
         e.preventDefault();
@@ -40,6 +41,7 @@ function AddTransaction() {
         const data = await response.json();
         if(data.err){
             console.log(data.err);
+            setFail(true);
         }else{
             getTransactions(user.userId, user.password)
             .then(res => {
@@ -59,11 +61,14 @@ function AddTransaction() {
         }
     }
 
+
     if(accounts.length === 0){
         return(
         <div>
             <h1>Please add an account first</h1>
-            <Link to='/add-account'><button>Add account</button></Link>
+            <div className='center'>
+                <Link to='/add-account'><button className='button'>Add account</button></Link>
+            </div>
         </div>
         )
     }
@@ -72,16 +77,16 @@ function AddTransaction() {
             <h1>Add Transactions</h1>
             <form  onSubmit={e=> addTransaction(e)} className='form'>
                 <label htmlFor='amount'>Amount</label>
-                <input className='input-field' type='number' id='amout' value={amount} required onChange={e => {setAmount(e.target.value); if(success){setSuccess(false)}}}/>
+                <input className='input-field' type='number' id='amout' value={amount} required onChange={e => {setAmount(e.target.value); if(success){setSuccess(false)}; if(fail){setFail(false)}}}/>
 
                 <label htmlFor='date'>Date</label>
-                <input className='input-field' type='date' id='date' required value={date} onChange={e => {setDate(e.target.value); if(success){setSuccess(false)}}}/>
+                <input className='input-field' type='date' id='date' required value={date} onChange={e => {setDate(e.target.value); if(success){setSuccess(false)}; if(fail){setFail(false)}}}/>
 
                 <label htmlFor='desc'>Description</label>
-                <input className='input-field' type='text' id='desc' value={desc} onChange={e => {setDesc(e.target.value); if(success){setSuccess(false)}}}/>
+                <input className='input-field' type='text' id='desc' value={desc} onChange={e => {setDesc(e.target.value); if(success){setSuccess(false)}; if(fail){setFail(false)}}}/>
 
                 <label htmlFor='account'>Account</label>
-                <select className='input-field' name='account' id='account' value={account} required onChange={e => {setAccount(e.target.value); if(success){setSuccess(false)}}}>
+                <select className='input-field' name='account' id='account' value={account} required onChange={e => {setAccount(e.target.value); if(success){setSuccess(false)}; if(fail){setFail(false)}}}>
                 <option value=''>select</option>
                     {accounts.map((item, i)=> {
                         return <option key={item.id} value={item.id}>{item.name} - {item.currency}</option>
@@ -90,6 +95,7 @@ function AddTransaction() {
                 <input className='button' type='submit' value='Add'/>
             </form>
             <p className='success'>{success ? 'Transaction added' :''}</p>
+            <p className='fail'>{fail ? 'Failed to add transaction. Avoid using apostrophe' : ''}</p>
         </div>
     )
 }

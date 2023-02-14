@@ -1,10 +1,11 @@
 const express = require('express'); 
 const db = require('./queries.js')
+const cors = require('cors');
 const app = express(); 
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3001; 
 
-
+app.use(cors());
 //app.use(express.static('public'))
 //app.use(express.json({extended: true, limit: '1mb'}));
 app.use(bodyParser.json());
@@ -15,7 +16,7 @@ app.get('/transactions-and-accounts', db.authorize, db.getTransactionsAndAccount
 app.get('/transactions', db.authorize, db.getTransactions);
 app.get('/accounts', db.authorize, db.getAccounts);
 
-app.post('/register-user', db.register);
+app.post('/register-user',db.createUser, db.register);
 app.post('/add-transaction', db.authorize, db.addTransaction);
 app.post('/add-account', db.authorize, db.addAccount );
 

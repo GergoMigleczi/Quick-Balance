@@ -44,19 +44,35 @@ const login = async (req, res) =>{
     
 }
 
-const register = async (req, res) =>{
-    console.log('register')
+const createUser = async (req, res, next) => {
     pool.query('VACUUM;', (err, result) => {
         if(err){
             console.log(err);
             res.json({"err": "Failed to register an account"})
         }
     });
+    console.log('register')
+    const salt = await bcrypt.genSalt(10)
+    //console.log('register-salt ', salt);
+    const hash = await bcrypt.hash(req.body.password, salt);
+    //console.log('register-hash ', hash);
+    pool.query(`INSERT INTO users (id, username, password) VALUES (${req.body.id}, '${req.body.username}', '${hash}')`, (err, result) => {
+        if(err){
+            console.log(err)
+            res.json({"err": "Failed to register an account"})
+        }
+        if(result){
+            next();
+        }
+    })
+}
+
+const register = async (req, res) =>{
     pool.query(`CREATE TABLE accounts_${req.body.id} (
         id SERIAL PRIMARY KEY,
         name varchar(20),
         currency varchar(10)
-    );`, (err, res)=>{
+    );`, (err, result)=>{
         if(err){
             console.log(err)
             res.json({"err": "Failed to register an account"})
@@ -68,25 +84,14 @@ const register = async (req, res) =>{
         description text,
         amount integer,
         date varchar(10)
-    );`, (err, res)=>{
+    );`, (err, result)=>{
         if(err){
             console.log(err)
             res.json({"err": "Failed to register an account"})
-        }
-    });
-    const salt = await bcrypt.genSalt(10)
-    //console.log('register-salt ', salt);
-    const hash = await bcrypt.hash(req.body.password, salt);
-    //console.log('register-hash ', hash);
-    pool.query(`INSERT INTO users (id, username, password) VALUES (${req.body.id}, '${req.body.username}', '${hash}')`, (err, result) => {
-        if(err){
-            console.log(err)
-            res.json({"err": "Failed to register an account"})
-        }
-        if(result){
+        }else{
             res.json(result);
         }
-    })
+    });
     
     
 }
@@ -172,6 +177,7 @@ const addTransaction = (req, res) =>{
     VALUES (${req.body.accountId}, ${req.body.amount}, '${req.body.description}', '${req.body.date}')`, (err, result) =>{
         if(err){
             console.log(err);
+            res.json({"err": "Failed to add transaction"})
         }
         if(result){
             res.json(result.rows)
@@ -190,6 +196,7 @@ const addAccount = (req, res) => {
     VALUES (${req.body.id},'${req.body.name}', '${req.body.currency}');`, (err, result) =>{
         if(err){
             console.log(err)
+            res.json({"err": "Failed to add account"})
         }
         if(result){
             res.json({id: req.body.id,
@@ -238,6 +245,7 @@ const editTransaction = (req, res) => {
 module.exports ={
     getUsers,
     login,
+    createUser,
     register,
     authorize,
     getTransactions,

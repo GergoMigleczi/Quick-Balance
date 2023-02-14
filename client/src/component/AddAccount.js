@@ -20,6 +20,7 @@ function AddAccount() {
     const [currency, setCurrency] = useState('');
     const [exists, setExists] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [fail, setFail] = useState(false);
 
     const accounts = useSelector(selectAccounts)
     
@@ -51,6 +52,7 @@ function AddAccount() {
             const data = await response.json();
             if(data.err){
                 console.log(data.err)
+                setFail(true);
             }else{
                 console.log(data)
                 dispatch(userState.actions.addAccount(data));
@@ -67,13 +69,14 @@ function AddAccount() {
         <p className='fail'>{exists ? 'Account already exists' : ''}</p>
         <form onSubmit={e => addAccount(e)} className='form'>
             <label htmlFor='name'>Name</label>
-            <input className='input-field' type='text' id='name' value={name} onChange={e => {setName(e.target.value); if(success){setSuccess(false)}; if(exists){setExists(false)}}} required max='19'/>
+            <input className='input-field' type='text' id='name' value={name} onChange={e => {setName(e.target.value); if(success){setSuccess(false)}; if(exists){setExists(false)}; if(fail){setFail(false)}}} required max='19'/>
             <label htmlFor='currency'>Currency</label>
-            <input className='input-field' type='text' id='currency' value={currency} onChange={e => {setCurrency(e.target.value); if(success){setSuccess(false)}; if(exists){setExists(false)}}} required max='9'/>
+            <input className='input-field' type='text' id='currency' value={currency} onChange={e => {setCurrency(e.target.value); if(success){setSuccess(false)}; if(exists){setExists(false)}; if(fail){setFail(false)}}} required max='9'/>
 
             <input className='button' type='submit' value='Add' />
         </form>
         <p className='success'>{success ? 'Account added' :''}</p>
+        <p className='fail'>{fail ? 'Failed to add account. Avoid using apostrophe' : ''}</p>
     </div>
   )
 }

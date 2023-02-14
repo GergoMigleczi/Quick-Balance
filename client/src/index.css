@@ -80,6 +80,10 @@ select{
   margin-left: 5px;
 }
 
+.center{
+  margin: 0 auto;
+  width: 115px;
+}
 .success{
   color: green;
   font-weight: bold;
@@ -89,8 +93,7 @@ select{
 
 .fail{
   color: red;
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-align: center;
 }
 
