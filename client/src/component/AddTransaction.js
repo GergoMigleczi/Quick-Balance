@@ -25,10 +25,14 @@ function AddTransaction() {
     const [account, setAccount] = useState('');
     const [success, setSuccess] = useState(false);
     const [fail, setFail] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const root = "https://quick-balance-9d1e.onrender.com";
+
 
     const addTransaction = async (e) =>{
         e.preventDefault();
-        const response = await fetch(`/add-transaction?id=${user.userId}&password=${user.password}`, {
+        setLoading(true);
+        const response = await fetch(`${root}/add-transaction?id=${user.userId}&password=${user.password}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -42,6 +46,7 @@ function AddTransaction() {
         if(data.err){
             console.log(data.err);
             setFail(true);
+            setLoading(false);
         }else{
             getTransactions(user.userId, user.password)
             .then(res => {
@@ -57,6 +62,7 @@ function AddTransaction() {
             setAmount('');
             setDesc('');
             setDate('');
+            setLoading(false);
             setSuccess(true);
         }
     }
@@ -73,6 +79,8 @@ function AddTransaction() {
         )
     }
     return (
+        
+    <div>
         <div className='add-transaction'>
             <h1>Add Transactions</h1>
             <form  onSubmit={e=> addTransaction(e)} className='form'>
@@ -96,7 +104,19 @@ function AddTransaction() {
             </form>
             <p className='success'>{success ? 'Transaction added' :''}</p>
             <p className='fail'>{fail ? 'Failed to add transaction. Avoid using apostrophe' : ''}</p>
+            {loading ? <div class="loader"></div> : ''}
+        </div>  
+
+        <div className='flex home-container center-v wrap top-padding'>
+          <div className='flex center-v wrap'>
+            <Link to='/transactions'><button className='button'>View transactions</button></Link>
+            <Link to='/accounts'><button className='button'>View accounts</button></Link>
+          </div>
+          <div className='flex center-v wrap'>
+            <Link to='/add-account'><button className='button'>Add account</button></Link>
+          </div>
         </div>
+    </div>
     )
 }
 

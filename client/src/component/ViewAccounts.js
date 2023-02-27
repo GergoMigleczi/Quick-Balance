@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAccounts, selectUser, user as userState } from '../app/userSlice'
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import './CSS/ViewTransactions.css'
 import './CSS/ViewAccount.css'
 import { getTransactions } from './functions';
@@ -20,11 +20,12 @@ function ViewAccounts() {
 
     const dispatch = useDispatch();
     const accounts = useSelector(selectAccounts);
+    const root = "https://quick-balance-9d1e.onrender.com";
 
     if(accounts){
 
         const deleteAccount = async (id) =>{
-            const response = await fetch(`/delete-account?id=${user.userId}&password=${user.password}`, {
+            const response = await fetch(`${root}/delete-account?id=${user.userId}&password=${user.password}`, {
                 method: 'DELETE',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -69,7 +70,15 @@ function ViewAccounts() {
                         </div>
                     })}
                 </div>
-                
+                <div className='flex home-container center-v wrap top-pad-50'>
+                <div className='flex center-v wrap'>
+                    <Link to='/transactions'><button className='button'>View transactions</button></Link>
+                    <Link to='/add-transaction'><button className='button'>Add transactions</button></Link>
+                </div>
+                <div className='flex center-v wrap'>
+                    <Link to='/add-account'><button className='button'>Add account</button></Link>
+                </div>
+                </div>
             </div>
           )
     }else{

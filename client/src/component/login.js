@@ -13,12 +13,17 @@ function Login({loginORregister}) {
     const [incorrect, setIncorrect] = useState(false);
     const [exists, setExists] = useState(false);
     const [fail, setFail] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const root = "https://quick-balance-9d1e.onrender.com";
+    //const root = "http://localhost:3001";
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let link;
     let linkTo;
     let login;
+
     // LOGIN ------------------------------
     if(loginORregister === 'Log In'){
         link ='create account';
@@ -26,11 +31,13 @@ function Login({loginORregister}) {
 
         login = async(e) =>{
             e.preventDefault();
-            const response = await fetch(`/login?username=${username}&password=${password}`);
+            setLoading(true);
+            const response = await fetch(`${root}/login?username=${username}&password=${password}`);
             const data = await response.json();
             if(data.err){
                 //console.log(data.err)
                 setIncorrect(true);
+                setLoading(false);
             }else{
                 setIncorrect(false);
                 dispatch(user.actions.login({id: data.id, password: data.password}));
@@ -47,7 +54,7 @@ function Login({loginORregister}) {
                 }).catch(err => {
                     console.log(err);
                 })
-
+                setLoading(false);
                 navigate('/home')
             }
         }
@@ -58,13 +65,15 @@ function Login({loginORregister}) {
         link = 'login';
         login = async(e) =>{
             e.preventDefault();
-            const users = await fetch('/get-users');
+            setLoading(true);
+            const users = await fetch(`${root}/get-users`);
             const usersJson = await users.json();
             let exist = false;
             let id = 1;
             usersJson.forEach(item => {
                 if(item.username === username){
                     setExists(true);
+                    setLoading(false);
                     exist = true;
                 }
                 if(item.id === id){
@@ -73,7 +82,7 @@ function Login({loginORregister}) {
             });
             if(!exist){
                 setExists(false);
-                const response = await fetch(`/register-user`, {
+                const response = await fetch(`${root}/register-user`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -88,6 +97,7 @@ function Login({loginORregister}) {
                     setFail(true);
                 }else{
                     setFail(false);
+                    setLoading(false);
                     navigate('/');
 
                 }
@@ -107,11 +117,11 @@ function Login({loginORregister}) {
             {exists ? 'Username already exists!' : ''}</p>
             <form onSubmit={e => login(e)}>
                 <label htmlFor='username'>Username</label>
-                <input className='input-field' id='username' type='text' placeholder='username' required onChange={e => {setUsername(e.target.value); if(fail){setFail(false)}}}/>
+                <input className='input-field' id='username' type='text' placeholder='username' required onChange={e => {setUsername(e.target.value); if(fail){setFail(false)}; if(incorrect){setIncorrect(false)}}}/>
 
                 <label htmlFor='password'>Password</label>
                 <div className='flex center-h'>
-                    <input className='input-field' id='password' type='password' required onChange={e => {setPassword(e.target.value); if(fail){setFail(false)}}}/>
+                    <input className='input-field' id='password' type='password' required onChange={e => {setPassword(e.target.value); if(fail){setFail(false)}; if(incorrect){setIncorrect(false)}}}/>
                     <i className="far fa-eye" id="togglePassword" onClick={togglePassword}></i>
                 </div>
 
@@ -121,6 +131,7 @@ function Login({loginORregister}) {
                 </div>
             </form>
             <p className='fail'>{fail ? 'Failed to register an account. Avoid apostrophes' : ''}</p>
+            {loading ? <div class="loader"></div> : ''}
     </div>
   )
 }

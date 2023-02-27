@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, Link, useNavigate  } from 'react-router-dom'
+import { useParams, useNavigate, Link  } from 'react-router-dom'
 import { selectAccounts, selectTransactions,selectUser, user as userState} from '../app/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -33,6 +33,8 @@ function EditTransaction() {
     const [account, setAccount] = useState('');
     const [success, setSuccess] = useState(false);
     const [fail, setFail] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const root = "https://quick-balance-9d1e.onrender.com";
 
 
     let transactionToEdit = [];
@@ -43,6 +45,7 @@ function EditTransaction() {
     if(transactionToEdit){
         const edit = async (e) =>{
             e.preventDefault();
+            setLoading(true);
             let acc = '';
             let curr = '';
             let accId = 0;
@@ -58,7 +61,7 @@ function EditTransaction() {
                 }
             });
 
-            const response = await fetch(`/edit-transaction?id=${user.userId}&password=${user.password}`, {
+            const response = await fetch(`${root}/edit-transaction?id=${user.userId}&password=${user.password}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -73,6 +76,7 @@ function EditTransaction() {
             if(data.err){
                 console.log(data.err);
                 setFail(true);
+                setLoading(false);
             }else{
                 const payload = {
                     i: i,
@@ -90,10 +94,12 @@ function EditTransaction() {
                 setAmount('');
                 setDesc('');
                 setDate('');
+                setLoading(false);
                 setSuccess(true);
             }
         }
         return (
+        <div>
             <div className='edit-transaction'>
                 <h1>EditTransaction</h1>
                 <form onSubmit={e => {edit(e)}} className='form'>
@@ -117,7 +123,21 @@ function EditTransaction() {
                 </form>
                 <p className='success'>{success ? 'Edit successful' : ''}</p>
                 <p className='fail'>{fail ? 'Avoid using an apostrophe' : ''}</p>
+                {loading ? <div class="loader"></div> : ''}
             </div>
+
+            <div className='flex home-container center-v wrap top-padding'>
+                <div className='flex center-v wrap'>
+                    <Link to='/transactions'><button className='button'>View transactions</button></Link>
+                    <Link to='/add-transaction'><button className='button'>Add transactions</button></Link>
+                </div>
+                <div className='flex center-v wrap'>
+                    <Link to='/accounts'><button className='button'>View accounts</button></Link>
+                    <Link to='/add-account'><button className='button'>Add account</button></Link>
+
+                </div>
+            </div>
+        </div>
         )
     }else{
         return (

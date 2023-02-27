@@ -22,12 +22,13 @@ function Home() {
         <h1>Home</h1>
         <div className='flex home-container center-v wrap'>
           <div className='flex center-v wrap'>
-            <Link to='/transactions'><button className='button'>View transactions</button></Link>
-            <Link to='/add-transaction'><button className='button'>Add transactions</button></Link>
+            <Link to='/transactions'><button className='button'>View Transactions</button></Link>
+            <Link to='/add-transaction'><button className='button'>Add Transactions</button></Link>
           </div>
           <div className='flex center-v wrap'>
-            <Link to='/add-account'><button className='button'>Add account</button></Link>
-            <Link to='/accounts'><button className='button'>View accounts</button></Link>
+            <Link to='/accounts'><button className='button'>View Accounts</button></Link>
+            <Link to='/add-account'><button className='button'>Add Account</button></Link>
+
           </div>
         </div>
       </div>

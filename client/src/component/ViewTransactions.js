@@ -26,6 +26,7 @@ function ViewTransactions() {
     const [selectedMonth, setSelectedMonth] = useState('all');
     const [filteredList, setFilteredList] = useState([]);
     const [filteredListSet, setFilteredListSet] = useState(false);
+    const root = "https://quick-balance-9d1e.onrender.com";
 
     
 
@@ -159,7 +160,7 @@ function ViewTransactions() {
     }
 
     const deleteTransaction = async (id) => {
-        const response = await fetch(`/delete-transaction?id=${user.userId}&password=${user.password}`, {
+        const response = await fetch(`${root}/delete-transaction?id=${user.userId}&password=${user.password}`, {
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -246,7 +247,16 @@ function ViewTransactions() {
 
                     </div>
                 </div>
-                
+            
+                <div className='flex home-container center-v wrap top-pad-50'>
+                <div className='flex center-v wrap'>
+                    <Link to='/add-transaction'><button className='button'>Add transactions</button></Link>
+                    <Link to='/accounts'><button className='button'>View accounts</button></Link>
+                </div>
+                <div className='flex center-v wrap'>
+                    <Link to='/add-account'><button className='button'>Add account</button></Link>
+                </div>
+            </div>
             </div>
           )
     }else{
